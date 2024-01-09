@@ -110,23 +110,58 @@ Once we have it working in a POC, we want to scale it so it's usable:
 - Create a set of scripts you can amend and run once a suitable OS has been procured - we don't want to limit you to just Ubuntu.
 
 
-# Conmponents
-A computer
-- Ultra low power to run 24x7 or shutdown at certain times and startup at certain times.
+# Components
+We will need some hardware to run this on
 
-Looking at one of these as it takes 1..9 watts of power when in use:
+## Computer
+Ideally it will be an ultra low power to run 24x7 or shutdown at certain times and startup at certain times.  No matter what, if it's going to cost a fortune to run, it's a no no.
 
-https://www.odroid.co.uk/H3-Plus
+I am presently looking at one of these as it takes 1..9 watts of power when in use:
 
-Hard disk(s)
-- One for the OS, fast
-- One for the local backup
-- One for the backup of the twin system
-Operating System - Ubuntu Server, it's small and fast.
-Software - This wil be a combination of things, configured properly to allow all this to work.
+[Odroid H3+](https://www.odroid.co.uk/H3-Plus)
+
+### CPU
+This has an Intel Celeron N6005 built in.
+
+### Network
+This device does not have a WiFi card, so if you wish to run it on WiFi, you will need a WiFi card.
+
+It does have 2 Ethernet ports, which is ideal as we can assign one to the Internet side, and one to the LAN side and configure security into it.
+
+## Memory
+The board has 2x DDR 4 slots with a maximum of 64GB RAM.
+
+I just so happen to have 2x 8GB DDR's sat about doing nothing.  But anything from about 2GB RAM should work (min specs for OS is 1GB), so this should not cost a fortune. 
+
+## Storage
+SSD disks (as they take up less power)
+
+- Operating System
+- Local backup / filestore
+- Remote backup
+
+### Boot device
+we want to isolate the OS from the data. Luckily the H3+ has a bootable eMMC, which is selectable in the BIOS
+
+### Local disk
+Enough space for all your files.  The more users you have on this, the more space may be needed.
+
+### Remote disk
+If you are not planning on using in a symbiotic setup, this is not required. It should be specified by the symbiotic user.
+
+# Operating System
+We will be looking to use Ubuntu Server (22.04 LTS at the time of writing). It's small and fast.
+
+# Software
+This wil be a combination of things, depending on what you want to use it for.
+
+The system should allow this to be selectable on install and easy to add onto when the time arrives.
  - Docker
- - Nextcloud / Owncloud instance
+ - PiHole
+ - VPN
+ - FileShare
+ - Firewall
+ - LAMP stack
+ - Nextcloud / Owncloud instance, could be run as a Docker image
 
- 
 
-https://www.odroid.co.uk/H3-Plus
