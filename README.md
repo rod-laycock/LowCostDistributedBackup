@@ -20,6 +20,8 @@ The primary purpose for this is to regain control of my own data without submitt
 ### Local backup
 I have tried using a remote server to pull my files from, it's sometimes slow. We need this to be local so it's as fast as possible. 
 
+As this will be transferred to the Remote backup - it must be encrypted!
+
 ### Remote backup
 Should the worst happen (disk failure, flood, fire, theft, etc) we need a copy of my data offsite. I want this to be achievable via copying all files to cloud storage, BLOB storage, external hard disk or another instance of this solution via the a VPN connection and end to end encryption.  We should be able to set multiple locations (copy to Amazon, Ext Hard disk and another copy of this).
 
@@ -33,6 +35,9 @@ Cloning to another version of this can be done in a symbiotic solution where 2 p
 I don't pay for a TV license, as I don't watch British TV. So all my entertainment is done through streaming services, but if the Internet goes down, I'm stuck for things to watch.
 
 I'd like a library of films, etc I can watch without the need for Internet access.
+
+## File Sharing
+Public / Private file shares - allow sharing within the household only, or share with the symbiotic client, publicly accessible.
 
 ## VPN 
 Allow me access to my files whilst on the move, not essential as it could synchronise only when on local network.
