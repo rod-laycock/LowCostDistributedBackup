@@ -7,8 +7,7 @@ The idea behind this is to create a solution which performs the following:
 - Server which can run docker / websites / etc
 - OwnCloud / NextCloud to allow applications to be run
 
-More importantlt - this allows me to control my own data, securely.
-
+More importantly - this allows me to control my own data, securely.
 
 ## Local backup
 Remote storage is too slow, it needs to be local so it's as fast as LAN. 
@@ -30,6 +29,34 @@ I have need of adhoc stiuff - call me geeky.
 ## Owncloud / Next cloud
 
 I presently pay per month for a NextCloud instance.  Enough said.
+
+## Marketing / tracker blocking
+It must run a PiHole - no questions.
+
+# Proof of Concept
+
+So I am doing a POC using Ubuntu and [Multipass](https://multipass.run/). Start by installing Multipass to allow us to stand up / stop servers pretty quickly
+
+    $ sudo snap install multipass
+
+
+Now we have Multipass, I have added a public / private key pair into the POC folder of this project.
+
+> Username:  user
+> 
+> Password:  
+
+Thats right - there is no password, secure I know, but I wouldnt put this into production.
+
+Now I have created public/private keys for the user and a config yaml file - so let's fire up the server using:
+
+    $ multipass launch -n LocalServer --cloud-init server-init.yaml
+    $ multipass launch -n RemoteServer --cloud-init server-init.yaml
+    
+
+If you need any help with Multipass commands, check out their [documentation](https://multipass.run/docs). 
+
+
 
 # Conmponents
 A computer
