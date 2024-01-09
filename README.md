@@ -80,6 +80,8 @@ Now I have created public/private keys for the user and a config yaml file - so 
 
 If you need any help with Multipass commands, check out their [documentation](https://multipass.run/docs). 
 
+If you need help with Cloud-Init YAML configuration, check out the [examples](https://cloudinit.readthedocs.io/en/latest/reference/examples.html) and overall [documentation](https://cloudinit.readthedocs.io/en/latest/).
+
 Once we have the servers up and running we will need the IP addresses.
 
     $ multipass list
