@@ -56,6 +56,26 @@ Now I have created public/private keys for the user and a config yaml file - so 
 
 If you need any help with Multipass commands, check out their [documentation](https://multipass.run/docs). 
 
+Once we have the servers up and running we will need the IP addresses.
+
+    $ multipass list
+
+will give you something like the following:
+
+    Name                    State             IPv4             Image
+    LocalServer             Running           10.61.187.229    Ubuntu 22.04 LTS
+    RemoteServer            Running           10.61.187.177    Ubuntu 22.04 LTS
+
+The IP address is right there, 3rd column.
+
+Now we can connect to it using the following:
+
+    $ ssh user@<IP ADDRESS> -i multipass-ssh-key -o StrictHostKeyChecking=no
+
+This will then log you into the Ubuntu 22.04 server.
+
+## Next Steps
+
 
 
 # Conmponents
