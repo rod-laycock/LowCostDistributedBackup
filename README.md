@@ -75,7 +75,15 @@ Now we can connect to it using the following:
 This will then log you into the Ubuntu 22.04 server.
 
 ## Next Steps
+Using the --cloud-init file format, we can initialise users, groups, install packages, etc.  This can then allow you to play with the configuration.
 
+## Next Next Steps
+
+Once we have it working in a POC, we want to scale it so it's usable:
+
+- Create a VM image
+- Create an ISO
+- Create a set of scripts you can amend and run once a suitable OS has been procured - we don't want to limit you to just Ubuntu.
 
 
 # Conmponents
