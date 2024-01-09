@@ -1,26 +1,45 @@
 # Introduction
 The idea behind this is to create a solution which performs the following:
 
-- Local backup for all devices in my house (phone, laptop, desktop) for all users
-- Remote / off site copy of this backup
-- VPN to allow connectivity from anywhere
-- Server which can run docker / websites / etc
-- OwnCloud / NextCloud to allow applications to be run
+- Backup/File Store
+  - Local backup for all devices in my house (phone, laptop, tablet, desktop) for all users.
+    - All files encrypted on a per user basis.
+  - Remote / off site copy of this backup.
+- File streaming
+- VPN to allow connectivity from anywhere to stash, pull my files.
+- Docker server to run apps, containers, etc.
+- LAMP stack. Hey I'm a dev at heart!
+- OwnCloud / NextCloud to allow applications to be run.
+  - Could OC/NC connect and pull files from the store?
+- SSH control.
+- PiHole.
 
-More importantly - this allows me to control my own data, securely.
+## Backup/File Store
+The primary purpose for this is to regain control of my own data without submitting to Google, Microsoft or whoever else.
 
-## Local backup
-Remote storage is too slow, it needs to be local so it's as fast as LAN. 
+### Local backup
+I have tried using a remote server to pull my files from, it's sometimes slow. We need this to be local so it's as fast as possible. 
 
-## Remote backup
-Should the worst happen (disk failure, flood, fire, etc) this neeeds a copy offsite. I want this to be achievable via cloning files to cloud storage, BLOB storage, external hard disk or another instance of this solution via the VPN connection and end to end encryption.
+### Remote backup
+Should the worst happen (disk failure, flood, fire, theft, etc) we need a copy of my data offsite. I want this to be achievable via copying all files to cloud storage, BLOB storage, external hard disk or another instance of this solution via the a VPN connection and end to end encryption.  We should be able to set multiple locations (copy to Amazon, Ext Hard disk and another copy of this).
 
-This can be done in a symbiotic solution where 2 people run the same solution, both of them dedicate a disk to the other persons backup. Starting with a small disk and increasing as necessary.
+This should be done on a per user basis, as not all users have the same offsite storage requirements, e.g. Android users might want to clone to Google Drive, Apple users to iCloud.
+
+Cloning to another version of this can be done in a symbiotic solution where 2 people run the same solution, both of them dedicate a disk to the other persons backup. Starting with a small disk and increasing as necessary.
+
+![Symbiotic Backup](symbioticbackup.png)
+
+## File Streaming
+I don't pay for a TV license, as I don't watch British TV. So all my entertainment is done through streaming services, but if the Internet goes down, I'm stuck for things to watch.
+
+I'd like a library of films, etc I can watch without the need for Internet access.
 
 ## VPN 
 Allow me access to my files whilst on the move, not essential as it could synchronise only when on local network.
 
 As I have a mistrust of public wifi - essentially this would allow me secure access to the internet as well.
+
+Either way - the symbiotic solution must use VPN to synchronise files.
 
 ## Server which can run docker, websites
 
@@ -31,7 +50,7 @@ I have need of adhoc stiuff - call me geeky.
 I presently pay per month for a NextCloud instance.  Enough said.
 
 ## Marketing / tracker blocking
-It must run a PiHole - no questions.
+It must run a PiHole to avoid tracking and other marketing bullshit - no questions, this is a must.
 
 # Proof of Concept
 
