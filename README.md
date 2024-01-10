@@ -100,6 +100,8 @@ Now we can connect to it using the following:
 
 This will then log you into the Ubuntu 22.04 server.
 
+We can now install items which will be reflected in the ISO located at ``/var/snap/multipass/common/data/multipassd/vault/instances/*``
+
 ## Next Steps
 Using the --cloud-init file format, we can initialise users, groups, install packages, etc.  This can then allow you to play with the configuration.
 
