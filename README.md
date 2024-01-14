@@ -25,11 +25,10 @@ As this will be transferred to the Remote backup - it must be encrypted!
 ### Remote backup
 Should the worst happen (disk failure, flood, fire, theft, etc) we need a copy of my data offsite. I want this to be achievable via copying all files to cloud storage, BLOB storage, external hard disk or another instance of this solution via the a VPN connection and end to end encryption.  We should be able to set multiple locations (copy to Amazon, Ext Hard disk and another copy of this).
 
-This should be done on a per user basis, as not all users have the same offsite storage requirements, e.g. Android users might want to clone to Google Drive, Apple users to iCloud.
 
 Cloning to another version of this can be done in a symbiotic solution where 2 people run the same solution, both of them dedicate a disk to the other persons backup. Starting with a small disk and increasing as necessary.
 
-![Symbiotic Backup](symbioticbackup.png)
+![Symbiotic Backup](assets/symbioticbackup.png)
 
 ## File Streaming
 I don't pay for a TV license, as I don't watch British TV. So all my entertainment is done through streaming services, but if the Internet goes down, I'm stuck for things to watch.
@@ -169,3 +168,5 @@ The system should allow this to be selectable on install and easy to add onto wh
  - Nextcloud / Owncloud instance, could be run as a Docker image
 
 
+# Thanks
+Credit to CalTech Library for the scripts - https://github.com/caltechlibrary/cloud-init-examples/
