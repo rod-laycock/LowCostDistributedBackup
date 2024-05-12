@@ -1,5 +1,7 @@
 # Introduction
-The idea behind this is to create a solution which performs the following:
+Online backup solutions are not your own, they are owned by the company you sign up with and if they loose your valuable photos of your children; well it's not in their interst, but then again it's not their loss either.
+
+The idea behind this project is to create a distributed solution which, in which you can set up a server locally to back things up too. You then get one or more friends to do the same and link the servers into a collection of nodes to perform offsite replicas of your data which allow the following:
 
 - Backup/File Store
   - Local backup for all devices in my house (phone, laptop, tablet, desktop) for all users.
@@ -13,6 +15,9 @@ The idea behind this is to create a solution which performs the following:
   - Could OC/NC connect and pull files from the store?
 - SSH control.
 - PiHole.
+
+
+
 
 ## Backup/File Store
 The primary purpose for this is to regain control of my own data without submitting to Google, Microsoft or whoever else.
