@@ -7,8 +7,14 @@ The idea behind this project is to create a distributed solution which, in which
   - Local backup for all devices in my house (phone, laptop, tablet, desktop) for all users.
     - All files encrypted on a per user basis.
   - Remote / off site copy of this backup.
-- File streaming
-- VPN to allow connectivity from anywhere to stash, pull my files.
+  - End to end encryption
+  - Encryption in transit and at rest - we don't want anyone else accessing your data.
+- Local and remote access so you can pick up your data anywhere.
+
+
+The theory is that this computer is on 24x7 and also offers the following additional, in home, services:
+- File streaming/transcoding - so you can watch your videos / movies on any device.
+- VPN to allow connectivity from anywhere to allow secure connections over public wifi.
 - Docker server to run apps, containers, etc.
 - LAMP stack. Hey I'm a dev at heart!
 - OwnCloud / NextCloud to allow applications to be run.
@@ -16,16 +22,26 @@ The idea behind this project is to create a distributed solution which, in which
 - SSH control.
 - PiHole.
 
+## Savings
+At present a lot of people pay for individual services which cost cold, hard cash.
 
 
+Microsoft Office Family £79.99 per annum - £6.67 per month
+Website Hosting - £11 per month (approx)
+VPN - £7 (approx)
+
+These things along are now costing just under £25 per month, which is about £300 per annum.  If we then add on things like docker (cloud computing) and file streaming services, and then scale it up for a family of 4 - this becomes very costly indeed. 
+
+
+# Functionality
 
 ## Backup/File Store
-The primary purpose for this is to regain control of my own data without submitting to Google, Microsoft or whoever else.
+The primary purpose for this is to regain control of my own data without submitting to Google, Microsoft apple or whoever else, It's my data and I have a vested interest to ensure that this is a secure as possible for the future.
 
 ### Local backup
 I have tried using a remote server to pull my files from, it's sometimes slow. We need this to be local so it's as fast as possible. 
 
-As this will be transferred to the Remote backup - it must be encrypted!
+As this will be transferred to the Remote backup - it must be encrypted in transit and at rest!
 
 ### Remote backup
 Should the worst happen (disk failure, flood, fire, theft, etc) we need a copy of my data offsite. I want this to be achievable via copying all files to cloud storage, BLOB storage, external hard disk or another instance of this solution via the a VPN connection and end to end encryption.  We should be able to set multiple locations (copy to Amazon, Ext Hard disk and another copy of this).
