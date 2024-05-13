@@ -56,26 +56,30 @@ I don't pay for a TV license, as I don't watch British TV. So all my entertainme
 
 I'd like a library of films, etc I can watch without the need for Internet access.
 
-## File Sharing
+## File Sharing (SAMBA)
 Public / Private file shares - allow sharing within the household only, or share with the symbiotic client, publicly accessible.
 
-## VPN 
+## VPN (OpenVPN)
 Allow me access to my files whilst on the move, not essential as it could synchronise only when on local network.
 
 As I have a mistrust of public wifi - essentially this would allow me secure access to the internet as well.
 
 Either way - the symbiotic solution must use VPN to synchronise files.
 
-## Server which can run docker, websites
+## Server which can run docker, websites (Docker / NGINX / Apache)
 
 I have need of adhoc stiuff - call me geeky.
 
-## Owncloud / Next cloud
+## Office (NextCloud / OwnCloud)
 
 I presently pay per month for a NextCloud instance.  Enough said.
 
-## Marketing / tracker blocking
+## Marketing / tracker blocking (PiHole)
 It must run a PiHole to avoid tracking and other marketing bullshit - no questions, this is a must.
+
+
+
+
 
 # Proof of Concept
 
