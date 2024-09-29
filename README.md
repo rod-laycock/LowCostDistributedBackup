@@ -139,58 +139,124 @@ Once we have it working in a POC, we want to scale it so it's usable:
 
 
 # Components
-We will need some hardware to run this on
+We will need some hardware to run this on, and to ensure we get maximum savings, power efficiency is a musy.
 
-## Computer
 Ideally it will be an ultra low power to run 24x7 or shutdown at certain times and startup at certain times.  No matter what, if it's going to cost a fortune to run, it's a no no.
 
-I am presently looking at one of these as it takes 1..9 watts of power when in use:
+An ideal candidate is the latest Raspberry Pi, using the following components (all available from PiHut or Amazon)
+
+**Raspberry Pi 5 (8GB)**
+[PiHut](https://thepihut.com/products/raspberry-pi-5?variant=42531604955331) | 
+[Amazon UK](https://amzn.to/3Tv7ix8)
+ 
+**Raspberry Pi 5 USB-C Power Supply UK Plug**
+[PiHut](https://thepihut.com/products/raspberry-pi-27w-usb-c-power-supply?variant=42531604103363) |
+[Amazon UK](https://amzn.to/3ZoZYHa)
+
+
+**Raspberry Pi Active Cooler for Raspberry Pi 5**
+[PiHut](https://thepihut.com/products/active-cooler-for-raspberry-pi-5?variant=42531603906755) |
+[Amazon UK](https://amzn.to/3TxEXGO)
+
+**KKSB Cases Case for Raspberry Pi 5 with Space for Hats, Add-on Boards, Coolers, and NVMe Hats**
+[PiHut](https://thepihut.com/products/kksb-raspberry-pi-5-case-for-hats-and-coolers?variant=43516709437635) |
+[Amazon UK](https://amzn.to/3XsvIZv)
+
+**Dual M.2 NVMe SSD Shield PCIe Peripheral Board for Raspberry Pi 5**
+[PiHut](https://thepihut.com/products/hatdrive-dual-for-raspberry-pi-5?variant=43658329653443) |
+[Amazon UK](https://amzn.to/3TtdLJ4)
+
+**WD_BLACK SN770 1TB NVMe M.2 SSD**
+[Amazon Only](https://amzn.to/3Tv7lsO)
+
+You may need 2 of these, depending on the configuration or you may need increased capacity.
+
+
+If you are looking for a full on Intel based computer, then the following is also an option, but more expensive:
 
 [Odroid H3+](https://www.odroid.co.uk/H3-Plus)
 
+
 ### CPU
-This has an Intel Celeron N6005 built in.
+This needs to be able to cope with the demands of serving files and running an office system.
 
 ### Network
-This device does not have a WiFi card, so if you wish to run it on WiFi, you will need a WiFi card.
-
-It does have 2 Ethernet ports, which is ideal as we can assign one to the Internet side, and one to the LAN side and configure security into it.
+Wifi is now fast enough, but if you really need ultra fast, then a gigabit ethernet connection.
 
 ## Memory
-The board has 2x DDR 4 slots with a maximum of 64GB RAM.
+8 GB is good, but 16 is better, 32 GB is awesome. Depending on how you want to use it the more the better, but for basic one person office and file backup, 8GB should be more than sufficient (my present HP Proliant Microserver has 8GB on board and this works fine).
 
-I just so happen to have 2x 8GB DDR's sat about doing nothing.  But anything from about 2GB RAM should work (min specs for OS is 1GB), so this should not cost a fortune. 
 
 ## Storage
-SSD disks (as they take up less power)
+SSD disks (as they take up less power). We would be looking to segregate them in the following configuration:
 
-- Operating System
+- Operating System / Boot / Core apps.
 - Local backup / filestore
-- Remote backup
+- Remote backup / filestore
 
 ### Boot device
-we want to isolate the OS from the data. Luckily the H3+ has a bootable eMMC, which is selectable in the BIOS
+We want to isolate the OS and apps from the data. Luckily the H3+ has a bootable eMMC, which is selectable in the BIOS and the Raspberry Pi 5 boots from SD Card.
 
 ### Local disk
-Enough space for all your files.  The more users you have on this, the more space may be needed.
+Enough space for all your files.  The more users / files you have on this, the more space may be needed, but we need to start out with something so a 1GB NVMe would be fine to begin with
 
 ### Remote disk
-If you are not planning on using in a symbiotic setup, this is not required. It should be specified by the symbiotic user.
+If you are not planning on using in a symbiotic setup, this is not required. It should be specified by the symbiotic user, and match their local disk configuration.
 
 # Operating System
-We will be looking to use Ubuntu Server (22.04 LTS at the time of writing). It's small and fast.
+We will be looking to use Ubuntu Server. It's small and fast.
 
 # Software
 This wil be a combination of things, depending on what you want to use it for.
 
 The system should allow this to be selectable on install and easy to add onto when the time arrives.
- - Docker
- - PiHole
- - VPN
- - FileShare
- - Firewall
- - LAMP stack
- - Nextcloud / Owncloud instance, could be run as a Docker image
+ - Docker - to allow us to run apps
+ - PiHole - to prevent giving out data to marketing / big data bastards.
+ - FileShare - to allow local access to files.
+ - Firewall - obvious reasons.
+ - Nextcloud / Owncloud instance for office replacement, could be run as a Docker image
+ - SyncThing - allows us to synchronise to remote servers.
+
+
+
+
+# POC Process
+Create 2 VM's using Qemu / Virtual Box with the following minimum specs:
+
+CPU's: 2
+RAM: 2048
+HDD:
+	OS:	25GB
+	Local Data: 10GB - to write some data to
+	Remote Data: 10GB 
+
+Ubuntu Desktop - minimal install
+
+Install Nextcloud
+Install Syncthing
+
+Replicate it for the remote version
+Rename it / give it another IP
+
+# Info Tutorials
+
+## Install NextCloud
+### Ubuntu
+https://linuxgenie.net/install-configure-nextcloud-ubuntu-24-04/
+
+### Raspberry Pi
+https://raspberrytips.com/install-nextcloud-raspberry-pi/
+
+## Install SyncThing
+
+### Ubuntu 
+https://linux-packages.com/ubuntu-24-04/package/syncthing
+
+### Raspberry Pi
+https://gist.github.com/hdml/7b079c114d3e20bf69f1
+
+## SyncThing + NextCloud
+https://itcamefromtheinternet.com/blog/how-to-setup-nextcloud-syncthing/#step-2-syncthing-data-folder
 
 
 # Thanks
