@@ -1,0 +1,84 @@
+#cloud-config
+autoinstall:
+  version: 1
+  storage:
+    layout:
+      name: lvm
+      policy: all
+#      password: password
+      match:
+        path: [path to hard disk]
+    config:
+      - id: [device]
+        type: disk
+        ptable: gpt
+        path: [path_to_other disks]
+        wipe: superblock-recursive
+  source:
+    id: ubuntu-desktop-minimal
+  locale: en_gb.UTF-8
+  keyboard:
+    layout: uk
+  timezone: Europe/London
+  network:
+    version: 2
+    ethernets:
+      [adapter]:      
+        dhcp4: true
+  identity:
+    hostname: local
+    username: user
+    password: 'b14361404c078ffd549c03db443c3fede2f3e534d73f78f77301ed97d4a436a9fd9db05ee8b325c0ad36438b43fec8510c204fc1c1edb21d0941c00e9e2c1ce2'
+  ssh:
+    install-server: true
+    allow-pw: true
+    authorized-keys: []
+  packages:
+    - [name]
+  snaps:
+    - name: nextcloud
+      channel: stable
+      classic: true
+  shutdown: reboot
+  
+
+
+
+LOCAL
+  local: 192.168.122.49
+  local-server.local
+  NextCloud:  http://192.168.122.49
+  SyncThing:  http://192.168.122.49:8384
+  Id: RNGW53X-TIK3B25-5ZW43WL-HIZKFCP-QEHQK4G-SAMRSZL-KJ4AJ6N-SGPUMAA
+
+  # Install net-tools
+  #   sudo apt install net-tools
+
+  # Install vim
+  #   sudo apt-install vim
+
+  # Install Syncthing https://computingforgeeks.com/how-to-install-and-use-syncthing-on-ubuntu/
+  # Install Nextcloud - https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-nextcloud-on-ubuntu-20-04
+  
+
+REMOTE
+  192.168.122.9
+  remote-server.local
+
+snap --list
+  Chromium
+  GitKraken
+  Gimp
+  Godot-4
+  Nextcloud Desktop Client
+  Rpi-Imager
+
+flatpak
+Note that the directories 
+
+'/var/lib/flatpak/exports/share'
+'/home/rod/.local/share/flatpak/exports/share'
+
+are not in the search path set by the XDG_DATA_DIRS environment variable, so
+applications installed by Flatpak may not appear on your desktop until the
+session is restarted.
