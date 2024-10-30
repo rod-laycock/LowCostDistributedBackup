@@ -1,6 +1,0 @@
-users:
-  - default
-  - name: user
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    ssh_authorized_keys:
-    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDZKLSYsdYdNOdTa2I3QHAjAtmOko+jUI8WgUBzAfzeHxziKbvN6xou+sG4bncNeC1xN6/pH5UhTSBSKifXQ0hkgy0VzNDVp+HhRnN5i4U+gZT+jOcnLZdNLwzH0n7lsf887IGuUnSBpj+EaUICPRmclqqg9zUPkx06P3a3MaTdC5e5wBn/VezBZQqk8P22ti0/6LPCUCKvuNs9vOrA1UaV0V1HsKIABegunaU8fqPYydsjy5PhpzmfLLwuGuvgdtYWfXjF85ne9ng0/ZfYlvweWKNsFyoj5vMrKl/Pm+ctwnHRmnC1Iw1s+pP6RhRPHt3GXTBEQCHfYQl8ECEiSdrsExuLcOSuRanbwHTzdDnVth+C4O6/8f5PCYcaOig60CCZ7bnvPfFSXWLV+/XJtLJwxxC1pQIYddta11os4cCkIIxVv0/Zqx7jWtgpcDpb+3B2PCUonDlbraj9xVxt/otby5Q/vYgObpLOgS54/M2LnK+vJoepBWK1HljEVyTQcD0= user
