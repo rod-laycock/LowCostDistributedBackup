@@ -31,6 +31,11 @@ IMAGE
 A specific image we'll be using. The current use case is to 
 indicate a specific version of ubuntu.
 
+PRIVATE_SSH_KEY_NAME
+
+If this is specified, it will attempt to obtain the IP and log 
+you onto the SSH instance of the server.
+
 EXAMPLE
 
 In this example we'll start an machine name "invenio" and
@@ -64,6 +69,9 @@ else
         ;;
     esac
 fi
+
+SERVER_INIT="../server-init"
+
 
 #
 # Machine size is based on AWS T4g ARM machine sizes
@@ -123,9 +131,28 @@ if multipass list | grep "$MACHINE" >/dev/null; then
         exit 1
     esac
 else 
-    CLOUD_INIT="$MACHINE-local.yaml"
+    CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
     if [ ! -f "$CLOUD_INIT" ]; then
-        CLOUD_INIT="$MACHINE-init.yaml"
+        CLOUD_INIT="$SERVER_INIT/$MACHINE-local.yaml"
+        if [ ! -f "$CLOUD_INIT" ]; then
+            CLOUD_INIT="$SERVER_INIT/$MACHINE-init.yaml"
+            if [ ! -f "$CLOUD_INIT" ]; then
+                CLOUD_INIT="$SERVER_INIT/server-init-master.yaml"
+                if [ ! -f "$CLOUD_INIT" ]; then
+                    echo "Cannot locate any of the following server init files in $SERVER_INIT/"
+                    echo "   - $MACHINE.yaml"
+                    echo "   - $MACHINE-local.yaml"
+                    echo "   - $MACHINE-init.yaml"
+                    echo "   - server-init-master.yaml"
+                    echo ""
+                    echo "Please create one of them so they can be used in the above order."
+                    exit -1
+                else
+                    cp $SERVER_INIT/server-init-master.yaml $SERVER_INIT/$MACHINE.yaml
+                    CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
+                fi
+            fi 
+        fi 
     fi
     echo "Launching $MACHINE";
     multipass -v launch \
