@@ -10,7 +10,7 @@ NAME
 
 USAGE
 
-   $APP_NAME MACHINE_NAME [MACHINE_SIZE] [UBUNTU_VERSION] [PRIVATE_SSH_KEY_NAME]
+   $APP_NAME -n MACHINE_NAME [-s MACHINE_SIZE] [-v UBUNTU_VERSION] [-i CLOUD_INIT_FILE] [-k PRIVATE_SSH_KEY_NAME]
 
 SYNOPSIS
 
@@ -31,6 +31,10 @@ IMAGE
 A specific image we'll be using. The current use case is to 
 indicate a specific version of ubuntu.
 
+CLOUD_INIT_FILE
+
+The location of a Cloud Init file
+
 PRIVATE_SSH_KEY_NAME
 
 If this is specified, it will attempt to obtain the IP and log 
@@ -47,37 +51,55 @@ utilizing ubuntu 20.04 (focal).
 EOT
 }
 
+# Get parameters from the command line arguments
+while getopts 'n:s:v:i:k:h' OPTION; do
+  case "$OPTION" in
+    n)
+      P_MACHINE_NAME="$OPTARG"
+      ;;
+    s)
+      P_MACHINE_SIZE="$OPTARG"
+      ;;
+    v)
+      P_UBUNTU_VERSION="$OPTARG"
+      ;;
+    i)
+      P_INIT_FILE="$OPTARG"
+      ;;
+    k)
+        P_KEY_FILE="$OPTARG"
+      ;;
+    h)
+        usage
+        exit 0
+        ;;
+    ?)
+      usage
+      exit 0
+      ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
 #
 # Check if we're providing a machine name or using the existing primary name
 #
-if [ "$1" = "" ]; then
+if [ "$P_MACHINE_NAME" = "" ]; then
     # MACHINE=$(multipass get client.primary-name)
     usage
     exit 0
 else
-    case "$1" in
-        -h*)
-        usage
-        exit 0
-        ;;
-        help)
-        usage
-        exit 0
-        ;;
-        *)
-        MACHINE="$1"
-        ;;
-    esac
+    MACHINE="$P_MACHINE_NAME"
 fi
 
-SERVER_INIT="../server-init"
+SERVER_INIT="./server-init"
 
 
 #
 # Machine size is based on AWS T4g ARM machine sizes
 # See https://aws.amazon.com/ec2/instance-types/
 #
-if [ "$2" = "" ]; then
+if [ "$P_MACHINE_SIZE" = "" ]; then
     MACHINE_SIZE="--cpus 2 --memory 8G --disk 50G"
 else
     case "$2" in
@@ -108,8 +130,8 @@ fi
 #
 #Third cli option is what image we're using
 #
-if [ "$3" != "" ]; then
-	IMAGE="$3"
+if [ "$P_UBUNTU_VERSION" != "" ]; then
+	IMAGE="$P_UBUNTU_VERSION"
 else
 	IMAGE="jammy"
 fi
@@ -131,28 +153,29 @@ if multipass list | grep "$MACHINE" >/dev/null; then
         exit 1
     esac
 else 
-    CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
-    if [ ! -f "$CLOUD_INIT" ]; then
-        CLOUD_INIT="$SERVER_INIT/$MACHINE-local.yaml"
+    if [ "$P_INIT_FILE" != "" ]; then
+        CLOUD_INIT="$P_INIT_FILE"
         if [ ! -f "$CLOUD_INIT" ]; then
-            CLOUD_INIT="$SERVER_INIT/$MACHINE-init.yaml"
+            echo "Cannot locate cloud init file $CLOUD_INIT"
+            echo "Please specify a valid cloud init file."
+            exit -1
+        fi
+    else
+        CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
+        if [ ! -f "$CLOUD_INIT" ]; then
+            CLOUD_INIT="$SERVER_INIT/server-init-master.yaml"
             if [ ! -f "$CLOUD_INIT" ]; then
-                CLOUD_INIT="$SERVER_INIT/server-init-master.yaml"
-                if [ ! -f "$CLOUD_INIT" ]; then
-                    echo "Cannot locate any of the following server init files in $SERVER_INIT/"
-                    echo "   - $MACHINE.yaml"
-                    echo "   - $MACHINE-local.yaml"
-                    echo "   - $MACHINE-init.yaml"
-                    echo "   - server-init-master.yaml"
-                    echo ""
-                    echo "Please create one of them so they can be used in the above order."
-                    exit -1
-                else
-                    cp $SERVER_INIT/server-init-master.yaml $SERVER_INIT/$MACHINE.yaml
-                    CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
-                fi
-            fi 
-        fi 
+                echo "Cannot locate any of the following server init files in $SERVER_INIT/"
+                echo "   - $MACHINE.yaml"
+                echo "   - server-init-master.yaml"
+                echo ""
+                echo "Please create one of them so they can be used in the above order."
+                exit -1
+            else
+                cp $SERVER_INIT/server-init-master.yaml $SERVER_INIT/$MACHINE.yaml
+                CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
+            fi
+        fi
     fi
     echo "Launching $MACHINE";
     multipass -v launch \
@@ -179,11 +202,11 @@ fi
 #fi
 
 #
-# Include staff-favorites.bash if exists
+# Include staff-favorites.bash if exists - TODO: Look at this?
 #
-if [ -f scripts/staff-favorites.bash ]; then
-  multipass transfer scripts/staff-favorites.bash "$MACHINE:."
-fi
+# if [ -f scripts/staff-favorites.bash ]; then
+#   multipass transfer scripts/staff-favorites.bash "$MACHINE:."
+# fi
 #if [ -f scripts/setup-self-signed-SSL-certs.bash ]; then
 #  multipass transfer scripts/setup-self-signed-SSL-certs.bash "$MACHINE:."
 #fi
@@ -193,8 +216,8 @@ fi
 #
 multipass info "$MACHINE"
 
-if [ "$4" != "" ]; then
+if [ "$P_KEY_FILE" != "" ]; then
     LOCALSERVER_IP=$(multipass info $MACHINE | grep IPv4 | cut -b 17-)
-    USER=$(cat $4.pub | cut -d ' ' -f 3)
-    ssh $USER@$LOCALSERVER_IP -i $4 -o StrictHostKeyChecking=no
+    USER=$(cat $P_KEY_FILE.pub | cut -d ' ' -f 3)
+    ssh $USER@$LOCALSERVER_IP -i $P_KEY_FILE -o StrictHostKeyChecking=no
 fi
