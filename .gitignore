@@ -1,2 +1,3 @@
 .secrets
 ssh-keys/
+!ssh-keys/README.md
