@@ -10,7 +10,7 @@ NAME
 
 USAGE
 
-   $APP_NAME -n MACHINE_NAME [-s MACHINE_SIZE] [-v UBUNTU_VERSION] [-i CLOUD_INIT_FILE] [-k PRIVATE_SSH_KEY_NAME]
+   $APP_NAME -n MACHINE_NAME [-s MACHINE_SIZE] [-v UBUNTU_VERSION] [-i CLOUD_INIT_FILE]
 
 SYNOPSIS
 
@@ -35,10 +35,6 @@ CLOUD_INIT_FILE
 
 The location of a Cloud Init file
 
-PRIVATE_SSH_KEY_NAME
-
-If this is specified, it will attempt to obtain the IP and log 
-you onto the SSH instance of the server.
 
 EXAMPLE
 
@@ -65,6 +61,7 @@ while getopts 'n:s:v:i:k:h' OPTION; do
       ;;
     i)
       P_INIT_FILE="$OPTARG"
+      CLOUD_INIT_FILE=$P_INIT_FILE
       ;;
     k)
         P_KEY_FILE="$OPTARG"
@@ -153,37 +150,13 @@ if multipass list | grep "$MACHINE" >/dev/null; then
         exit 1
     esac
 else 
-    if [ "$P_INIT_FILE" != "" ]; then
-        CLOUD_INIT="$P_INIT_FILE"
-        if [ ! -f "$CLOUD_INIT" ]; then
-            echo "Cannot locate cloud init file $CLOUD_INIT"
-            echo "Please specify a valid cloud init file."
-            exit -1
-        fi
-    else
-        CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
-        if [ ! -f "$CLOUD_INIT" ]; then
-            CLOUD_INIT="$SERVER_INIT/server-init-master.yaml"
-            if [ ! -f "$CLOUD_INIT" ]; then
-                echo "Cannot locate any of the following server init files in $SERVER_INIT/"
-                echo "   - $MACHINE.yaml"
-                echo "   - server-init-master.yaml"
-                echo ""
-                echo "Please create one of them so they can be used in the above order."
-                exit -1
-            else
-                cp $SERVER_INIT/server-init-master.yaml $SERVER_INIT/$MACHINE.yaml
-                CLOUD_INIT="$SERVER_INIT/$MACHINE.yaml"
-            fi
-        fi
-    fi
     echo "Launching $MACHINE";
     multipass -v launch \
 		--name "${MACHINE}" \
-        --cloud-init "${CLOUD_INIT}" \
+        --cloud-init "${CLOUD_INIT_FILE}" \
 		$MACHINE_SIZE \
 		$IMAGE
-	echo "Restart ${MACHINE}"
+	  echo "Restart ${MACHINE}"
     multipass restart "${MACHINE}"
 fi
 
@@ -215,9 +188,3 @@ fi
 # Display state of machine
 #
 multipass info "$MACHINE"
-
-if [ "$P_KEY_FILE" != "" ]; then
-    LOCALSERVER_IP=$(multipass info $MACHINE | grep IPv4 | cut -b 17-)
-    USER=$(cat $P_KEY_FILE.pub | cut -d ' ' -f 3)
-    ssh $USER@$LOCALSERVER_IP -i $P_KEY_FILE -o StrictHostKeyChecking=no
-fi

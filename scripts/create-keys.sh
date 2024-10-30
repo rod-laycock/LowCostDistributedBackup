@@ -38,5 +38,14 @@ else
         return -1
     else
         ssh-keygen -C $1 -f $2
+        if [ ! -f "$2.pub" ]; then
+            echo "Failed to create public key"
+            exit -1
+        fi
+        
+        PUBLIC_KEY=$(cat $2.pub)
+        chmod 644 $2.pub
+        chmod 600 $2
+
     fi
 fi

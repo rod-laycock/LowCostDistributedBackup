@@ -1,3 +1,6 @@
 # .secrets
 ssh-keys/
 !ssh-keys/README.md
+
+server-init/
+!server-init/server-init-master.yaml
