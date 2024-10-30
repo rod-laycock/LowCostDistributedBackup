@@ -10,7 +10,7 @@ NAME
 
 USAGE
 
-   $APP_NAME MACHINE_NAME [MACHINE_SIZE] [UBUNTU_VERSION]
+   $APP_NAME MACHINE_NAME [MACHINE_SIZE] [UBUNTU_VERSION] [PRIVATE_SSH_KEY_NAME]
 
 SYNOPSIS
 
@@ -165,3 +165,9 @@ fi
 # Display state of machine
 #
 multipass info "$MACHINE"
+
+if [ "$4" != "" ]; then
+    LOCALSERVER_IP=$(multipass info $MACHINE | grep IPv4 | cut -b 17-)
+    USER=$(cat $4.pub | cut -d ' ' -f 3)
+    ssh $USER@$LOCALSERVER_IP -i $4 -o StrictHostKeyChecking=no
+fi
