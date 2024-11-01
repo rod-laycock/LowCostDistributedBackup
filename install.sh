@@ -6,14 +6,17 @@ get_secret() {
 }
 
 # Define the folders to be used.
-SCRIPTS_DIR="./scripts"
-SSH_KEYS_DIR="./ssh-keys"
-SERVER_INIT_DIR="./server-init"
+echo "Defining folder structure"
+ROOT_DIR=$(pwd)
+SCRIPTS_DIR="$ROOT_DIR/scripts"
+SSH_KEYS_DIR="$ROOT_DIR/ssh-keys"
+SERVER_INIT_DIR="$ROOT_DIR/server-init"
 
 # Define the master init file
 MASTER_INIT_FILE="$SERVER_INIT_DIR/server-init-master.yaml"
 
 # Read Secrets from .secrets file and set up environment variables
+echo "Loading secrets"
 get_secret "@USERNAME"
 USERNAME=$SECRET
 
@@ -39,14 +42,18 @@ get_secret "@NEXTCLOUD_PASSWORD"
 NEXTCLOUD_PASSWORD=$SECRET
 
 # Define non secret Environment Variables
+echo "Defining machine"
 MACHINE_NAME="LocalServer"
 MACHINE_SIZE="xlarge"
 UBUNTU_VERSION="jammy"
 CLOUD_INIT_FILE="$SERVER_INIT_DIR/$MACHINE_NAME-init.yaml"
-PRIVATE_SSH_KEY_NAME="$USER"
-PUBLIC_SSH_KEY="$USER.pub"
+PRIVATE_SSH_KEY_NAME="$SSH_KEYS_DIR/$USER"
+PUBLIC_SSH_KEY="$SSH_KEYS_DIR/$USER.pub"
 
+echo "Setting Next Cloud domain"
 NC_DOMAIN="nextcloud.local"
+
+echo "Setting timezone"
 TIMEZONE="Europe/London"
 
 APACHE_IP_BINDING=$(multipass info $MACHINE | grep IPv4 | cut -b 17-)
@@ -70,15 +77,18 @@ TALK_PORT=19302
 # DO NOT EDIT PAST THIS POINT
 
 # Create SSH Keys
-$SCRIPTS_DIR/create-keys.sh $USERNAME ./ssh-keys/$PRIVATE_SSH_KEY_NAME
+echo "Creating SSH Key"
+$SCRIPTS_DIR/create-keys.sh $USERNAME $PRIVATE_SSH_KEY_NAME
 
 # Check to see if we have an init file already, if so delete it.
 if [ -f $CLOUD_INIT_FILE ]; then
+    echo "Removing existing Cloud Init configuration"
     rm $CLOUD_INIT_FILE
 fi
 
 # Clone the master init script
 if [ -f $MASTER_INIT_FILE ]; then
+    echo "Cloning Master Cloud Init configuration "
     cp $MASTER_INIT_FILE $CLOUD_INIT_FILE
 else
     echo "Cannot locate the master init file - $MASTER_INIT_FILE"
@@ -86,8 +96,10 @@ else
 fi
 
 # Import the user and SSH Keys into the init script
-if [ -f "$SSH_KEYS_DIR/$PUBLIC_SSH_KEY" ]; then
-    PUBLIC_KEY=$(cat $SSH_KEYS_DIR/$PUBLIC_SSH_KEY)
+if [ -f "$PUBLIC_SSH_KEY" ]; then
+
+    echo "Adding SSH Key to Cloud Init configuration"
+    PUBLIC_KEY=$(cat $PUBLIC_SSH_KEY)
     tee -a $CLOUD_INIT_FILE <<EOF
 # Define users
 #  Username: $USERNAME
@@ -107,7 +119,10 @@ else
 fi
 
 # Create Server
-"$SCRIPTS_DIR/start-vm.sh -n $MACHINE_NAME -s $MACHINE_SIZE -v $UBUNTU_VERSION -i $CLOUD_INIT_FILE -k $SSH_KEYS_DIR/$PUBLIC_SSH_KEY"
+echo "Creating server instance"
+#$("$SCRIPTS_DIR/start-vm.sh -n $MACHINE_NAME -s $MACHINE_SIZE -i $UBUNTU_VERSION -c $CLOUD_INIT_FILE")
+
+$SCRIPTS_DIR/start-vm.sh -n $MACHINE_NAME -s $MACHINE_SIZE -i $UBUNTU_VERSION -c $CLOUD_INIT_FILE
 
 # Log onto server
 # if [ "$P_KEY_FILE" != "" ]; then

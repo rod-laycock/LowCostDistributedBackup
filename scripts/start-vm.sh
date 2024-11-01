@@ -48,7 +48,7 @@ EOT
 }
 
 # Get parameters from the command line arguments
-while getopts 'n:s:i:c:k:h' OPTION; do
+while getopts 'n:s:i:c:h' OPTION; do
   case "$OPTION" in
     n)
       MACHINE_NAME="$OPTARG"
@@ -62,9 +62,6 @@ while getopts 'n:s:i:c:k:h' OPTION; do
     c)
       CLOUD_INIT_FILE="$OPTARG"
       ;;
-    k)
-      KEY_FILE="$OPTARG"
-      ;;
     h)
         usage
         exit 0
@@ -77,6 +74,12 @@ while getopts 'n:s:i:c:k:h' OPTION; do
 done
 shift "$(($OPTIND -1))"
 
+echo "Machine Name: $MACHINE_NAME"
+echo "Machine Size: $MACHINE_SIZE"
+echo "Machine Image: $IMAGE"
+echo "Cloud Image File: $CLOUD_INIT_FILE"
+
+
 #
 # Check if we're providing a machine name or using the existing primary name
 #
@@ -84,9 +87,6 @@ if [ "$MACHINE_NAME" = "" ]; then
     usage
     exit 0
 fi
-
-SERVER_INIT="./server-init"
-
 
 #
 # Machine size is based on AWS T4g ARM machine sizes
@@ -125,35 +125,33 @@ fi
 #
 if [ "$IMAGE" = "" ]; then
 	IMAGE="jammy"
-else
-	
 fi
 
 #
 # Figure out if we're launching, starting or machine is already active
 #
-if multipass list | grep "$MACHINE" >/dev/null; then
-    VM_STATE=$(multipass info "$MACHINE" | grep -i State)
+if multipass list | grep "$MACHINE_NAME" >/dev/null; then
+    VM_STATE=$(multipass info "$MACHINE_NAME" | grep -i State)
     case "${VM_STATE}" in
         *Stopped)
-        multipass start "$MACHINE"
+        multipass start "$MACHINE_NAME"
         ;;
         *Running)
-        echo "$MACHINE is already running"
+        echo "$MACHINE_NAME is already running"
         ;;
         *)
         echo "VM is $VM_STATE, wait and run again"
         exit 1
     esac
 else 
-    echo "Launching $MACHINE";
+    echo "Launching $MACHINE_NAME";
     multipass -v launch \
-		--name "${MACHINE}" \
+		--name "${MACHINE_NAME}" \
         --cloud-init "${CLOUD_INIT_FILE}" \
 		$MACHINE_SIZE \
 		$IMAGE
-	  echo "Restart ${MACHINE}"
-    multipass restart "${MACHINE}"
+	  echo "Restart ${MACHINE_NAME}"
+    multipass restart "${MACHINE_NAME}"
 fi
 
 #
@@ -183,4 +181,4 @@ fi
 # 
 # Display state of machine
 #
-multipass info "$MACHINE"
+multipass info "$MACHINE_NAME"
