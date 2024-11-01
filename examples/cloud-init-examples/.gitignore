@@ -1,0 +1,8 @@
+*~
+*.tmp
+*.swp
+*.bak
+src/*
+Sites/*
+.DS_Store
+*-local.yaml

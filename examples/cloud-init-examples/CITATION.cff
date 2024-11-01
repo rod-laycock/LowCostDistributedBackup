@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: cloud-init-examples
+authors:
+  - family-names: Doiel
+    given-names: R. S.
+    orcid: https://orcid.org/0000-0003-0900-6903
+abstract: This is a collection of Bash scripts and cloud-init YAML files to be used with multipass for generating virtual machines useful for software development in libraries and archives.
+repository-code: "https://github.com/caltechlibrary/cloud-init-examples"
+type: software
+version: 0.0.9
+license-url: "https://caltechlibrary.github.io/cloud-init-examples/LICENSE"
+date-released: 2024-05-29
