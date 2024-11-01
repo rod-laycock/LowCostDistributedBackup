@@ -10,7 +10,7 @@ NAME
 
 USAGE
 
-   $APP_NAME -n MACHINE_NAME [-s MACHINE_SIZE] [-v UBUNTU_VERSION] [-i CLOUD_INIT_FILE]
+   $APP_NAME -n MACHINE_NAME [-s MACHINE_SIZE] [-i IMAGE] [-c CLOUD_INIT_FILE]
 
 SYNOPSIS
 
@@ -48,23 +48,22 @@ EOT
 }
 
 # Get parameters from the command line arguments
-while getopts 'n:s:v:i:k:h' OPTION; do
+while getopts 'n:s:i:c:k:h' OPTION; do
   case "$OPTION" in
     n)
-      P_MACHINE_NAME="$OPTARG"
+      MACHINE_NAME="$OPTARG"
       ;;
     s)
-      P_MACHINE_SIZE="$OPTARG"
-      ;;
-    v)
-      P_UBUNTU_VERSION="$OPTARG"
+      MACHINE_SIZE="$OPTARG"
       ;;
     i)
-      P_INIT_FILE="$OPTARG"
-      CLOUD_INIT_FILE=$P_INIT_FILE
+      IMAGE="$OPTARG"
+      ;;
+    c)
+      CLOUD_INIT_FILE="$OPTARG"
       ;;
     k)
-        P_KEY_FILE="$OPTARG"
+      KEY_FILE="$OPTARG"
       ;;
     h)
         usage
@@ -81,12 +80,9 @@ shift "$(($OPTIND -1))"
 #
 # Check if we're providing a machine name or using the existing primary name
 #
-if [ "$P_MACHINE_NAME" = "" ]; then
-    # MACHINE=$(multipass get client.primary-name)
+if [ "$MACHINE_NAME" = "" ]; then
     usage
     exit 0
-else
-    MACHINE="$P_MACHINE_NAME"
 fi
 
 SERVER_INIT="./server-init"
@@ -96,10 +92,10 @@ SERVER_INIT="./server-init"
 # Machine size is based on AWS T4g ARM machine sizes
 # See https://aws.amazon.com/ec2/instance-types/
 #
-if [ "$P_MACHINE_SIZE" = "" ]; then
+if [ "$MACHINE_SIZE" = "" ]; then
     MACHINE_SIZE="--cpus 2 --memory 8G --disk 50G"
 else
-    case "$2" in
+    case "$MACHINE_SIZE" in
         nano)
         MACHINE_SIZE="--cpus 2 --memory 512M --disk 50G"
         ;;
@@ -127,10 +123,10 @@ fi
 #
 #Third cli option is what image we're using
 #
-if [ "$P_UBUNTU_VERSION" != "" ]; then
-	IMAGE="$P_UBUNTU_VERSION"
-else
+if [ "$IMAGE" = "" ]; then
 	IMAGE="jammy"
+else
+	
 fi
 
 #
