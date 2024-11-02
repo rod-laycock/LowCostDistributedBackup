@@ -1,54 +1,67 @@
 #!/bin/bash
 
-# Function to pull values back from the .secrets file
-get_secret() {
-    SECRET=$(cat .secrets | grep $1 | cut -d '=' -f 2)
+set -E
+trap '[ "$?" -ne -1 ] || exit -1' ERR
+
+function usage() {
+    APP_NAME=$(basename $0)
+    cat<<EOT
+NAME
+   ${APP_NAME}
+
+SYSNOPSIS
+
+   ${APP_NAME}  (automatic | auto | a) | (manual | man | m)
+
+DESCRIPTION
+
+Runs the installation script in either "automatic" or "manual" mode.
+
+AUTOMATIC mode must have a .secrets file in the root folder.
+
+TODO: Cite example
+
+MANUAL mode will ignore the .secrets file and ask a set of guided questions
+
+EOT
 }
 
+# Set colours
+ERROR='\e[0;31m' # Red
+WARN='\e[0;33m' # Yellow
+NC='\e[0m' # No Color
+
+TEST_STRING="Test"
+
 # Define the folders to be used.
-echo "Defining folder structure"
+echo "Initialising the script"
 ROOT_DIR=$(pwd)
 SCRIPTS_DIR="$ROOT_DIR/scripts"
 SSH_KEYS_DIR="$ROOT_DIR/ssh-keys"
 SERVER_INIT_DIR="$ROOT_DIR/server-init"
 
+# Decide if this is manual or automatic install
+case $1 in
+    a | auto | automatic)
+    source $SCRIPTS_DIR/set-env-automatic.sh || exit 1
+    ;;
+    m | man | manual)
+    source $SCRIPTS_DIR/set-env-manual.sh || exit 1
+    ;;
+    *)
+    usage
+    exit 0
+    ;;
+esac
+
+
 # Define the master init file
 MASTER_INIT_FILE="$SERVER_INIT_DIR/server-init-master.yaml"
 
-# Read Secrets from .secrets file and set up environment variables
-echo "Loading secrets"
-get_secret "@USERNAME"
-USERNAME=$SECRET
-
-get_secret "@WHITEBOARD_SECRET"
-WHITEBOARD_SECRET=$SECRET
-
-get_secret "@REDIS_PASSWORD"
-REDIS_PASSWORD=$SECRET
-
-get_secret "@ONLYOFFICE_SECRET"
-ONLYOFFICE_SECRET=$SECRET
-
-get_secret "@TALK_INTERNAL_SECRET"
-TALK_INTERNAL_SECRET=$SECRET
-
-get_secret "@COLLABORA_SECCOMP_POLICY"
-COLLABORA_SECCOMP_POLICY=""
-
-get_secret "@DATABASE_PASSWORD"
-DATABASE_PASSWORD=$SECRET
-
-get_secret "@NEXTCLOUD_PASSWORD"
-NEXTCLOUD_PASSWORD=$SECRET
-
 # Define non secret Environment Variables
-echo "Defining machine"
-MACHINE_NAME="LocalServer"
-MACHINE_SIZE="xlarge"
-UBUNTU_VERSION="jammy"
 CLOUD_INIT_FILE="$SERVER_INIT_DIR/$MACHINE_NAME-init.yaml"
-PRIVATE_SSH_KEY_NAME="$SSH_KEYS_DIR/$USER"
-PUBLIC_SSH_KEY="$SSH_KEYS_DIR/$USER.pub"
+PRIVATE_SSH_KEY_NAME="$SSH_KEYS_DIR/$USERNAME"
+PUBLIC_SSH_KEY="$SSH_KEYS_DIR/$USERNAME.pub"
 
 echo "Setting Next Cloud domain"
 NC_DOMAIN="nextcloud.local"
@@ -104,7 +117,6 @@ if [ -f "$PUBLIC_SSH_KEY" ]; then
 # Define users
 #  Username: $USERNAME
 users:
-  - default
   - name: $USERNAME
     groups:
       - sudo

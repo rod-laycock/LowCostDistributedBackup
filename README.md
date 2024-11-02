@@ -56,8 +56,15 @@ I don't pay for a TV license, as I don't watch British TV. So all my entertainme
 
 I'd like a library of films, etc I can watch without the need for Internet access.
 
+Options here include:
+- Plex
+- Emby
+- Kodi
+- JellyFin
+
 ## File Sharing (SAMBA)
 Public / Private file shares - allow sharing within the household only, or share with the symbiotic client, publicly accessible.
+
 
 ## VPN (OpenVPN)
 Allow me access to my files whilst on the move, not essential as it could synchronise only when on local network.
@@ -261,3 +268,24 @@ https://itcamefromtheinternet.com/blog/how-to-setup-nextcloud-syncthing/#step-2-
 
 # Thanks
 Credit to CalTech Library for the scripts - https://github.com/caltechlibrary/cloud-init-examples/
+
+
+# Software needed
+- NextCloud
+- SyncThing
+- NginX / Apache
+- Docker
+- DB
+
+
+# Notes
+
+1. Create an SSH key
+1. Create a base VM
+1. Transfer scripts to base VM and run them.
+
+
+# TODO
+1. Fix the multipass transfer script which should copy the file "" to the multipass instance
+1. Use zenity to capture commands from the user
+
