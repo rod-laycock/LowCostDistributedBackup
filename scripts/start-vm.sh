@@ -169,13 +169,13 @@ fi
 #fi
 
 #
-# Include staff-favorites.bash if exists - TODO: Look at this?
+# Include install-software.sh if exists
 #
-# if [ -f scripts/staff-favorites.bash ]; then
-#   multipass transfer scripts/staff-favorites.bash "$MACHINE:."
-# fi
+if [ -f scripts/install-software.sh ]; then
+  multipass transfer scripts/install-software.sh "$MACHINE_NAME:."
+fi
 #if [ -f scripts/setup-self-signed-SSL-certs.bash ]; then
-#  multipass transfer scripts/setup-self-signed-SSL-certs.bash "$MACHINE:."
+#  multipass transfer scripts/setup-self-signed-SSL-certs.bash "$MACHINE_NAME:."
 #fi
 
 # 

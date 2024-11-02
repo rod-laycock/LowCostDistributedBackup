@@ -14,35 +14,17 @@ USAGE
 
 SYNOPSIS
 
-$APP_NAME will start a Multipass virtual machine or
-create it if it does not exist. It looks for a cloud init
-YAML file using the machine name followed by "-init.yaml".
+$APP_NAME will log into the SSH terminal on a Multipass virtual machine.
 
-MACHINE SIZES
+MACHINE NAME
 
-The machine sizes are based on AWS T4g series of machine
-sizes.  Sizes include nano, micro, small, medium, large,
-xlarge and 2xlarge.  The CPU count and memory settings
-see https://aws.amazon.com/ec2/instance-types/ or read
-the source file for $APP_NAME.
+The name of the machine you would like to log into, the IP will be pulled by calling `Multipass info`.
 
-IMAGE
+USER
 
-A specific image we'll be using. The current use case is to 
-indicate a specific version of ubuntu.
+The user of you wish to login as.
 
 CLOUD_INIT_FILE
-
-The location of a Cloud Init file
-
-
-EXAMPLE
-
-In this example we'll start an machine name "invenio" and
-if it does not exist it will be created with a size of xlarge
-utilizing ubuntu 20.04 (focal).
-
-    $APP_NAME invenio xlarge focal
 
 EOT
 }
@@ -53,7 +35,7 @@ while getopts 'n:u:h' OPTION; do
       MACHINE_NAME="$OPTARG"
       ;;
     u)
-      USER="$OPTARG"
+      LOGIN="$OPTARG"
       ;;
     h)
         usage
@@ -67,8 +49,12 @@ while getopts 'n:u:h' OPTION; do
 done
 shift "$(($OPTIND -1))"
 
+# TODO - check to see if a machine / user were passed in.
+
+# TODO - check to see if Multipass is running.
 IPV4_ADDRESS=$(multipass info $MACHINE_NAME | grep IPv4 | cut -b 17-)
 
-ssh $USER@$IPV4_ADDRESS -i ./ssh-keys/$USER -o StrictHostKeyChecking=no
+# TODO - check to see if we have an IP address
+ssh $LOGIN@$IPV4_ADDRESS -i ./ssh-keys/$LOGIN -o StrictHostKeyChecking=no
 
 
