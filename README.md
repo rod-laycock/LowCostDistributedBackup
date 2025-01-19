@@ -277,7 +277,6 @@ Credit to CalTech Library for the scripts - https://github.com/caltechlibrary/cl
 - Docker
 - DB
 
-
 # Notes
 
 1. Create an SSH key
@@ -285,7 +284,40 @@ Credit to CalTech Library for the scripts - https://github.com/caltechlibrary/cl
 1. Transfer scripts to base VM and run them.
 
 
+
+
 # TODO
 1. Fix the multipass transfer script which should copy the file "" to the multipass instance
 1. Use zenity to capture commands from the user
 
+
+
+## Auto start/shutdown the server
+To save more money, we can set the server to turn off at a specific time
+
+Start by discovering which shutdown command is in use
+```
+which shutdown
+```
+will return something like ```/usr/sbin/shutdown```
+
+Edit the crontab as follows
+
+```
+sudo vi /etc/crontab
+```
+
+To shut it down at 22:00 Add the following at the end
+
+```
+# Auto shutdown the machine
+00 22	* * *   root    /usr/sbin/shutdown -h now
+```
+
+Where 00 is the minutes and 22 is the hour
+
+If the server supports Startup at a specific time, you can set it in the BIOS.
+
+An alternative could be WakeOnLan commands (if you are using an ethernet cable) from another device.
+
+If this doesn't work, then you may have to press the power button itself.
